@@ -1,9 +1,27 @@
-import React from 'react'
+import React, { useState } from "react";
 
-function Qbtn() {
+type QbtnType = {
+  option: string;
+  index: number;
+  correctAnswer: number;
+  answerChecked:boolean;
+  selectedAnswer : number;
+  setSelectedAnswer : any;
+};
+
+function Qbtn({
+  option,
+  index,
+  correctAnswer,
+  selectedAnswer,
+  setSelectedAnswer,
+  answerChecked
+}: QbtnType) {
   return (
-    <div>Qbtn</div>
-  )
+    <div className="w-full group relative">
+      <button>{option}</button>
+    </div>
+  );
 }
 
-export default Qbtn
+export default Qbtn;

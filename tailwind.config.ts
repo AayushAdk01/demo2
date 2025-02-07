@@ -17,6 +17,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [heroui()],
+  plugins: [require('tailwindcss-motion'), require('tailwindcss-intersect') , heroui()],
 };
 export default config;

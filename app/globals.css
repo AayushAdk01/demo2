@@ -7,12 +7,32 @@
     padding: 0 16px;
     max-width: 1200px;
     width: 100%;
+}
 
-    @media (min-width: 768px) {
+@media (min-width: 768px) {
+    .container {
         padding: 0 24px;
     }
+}
 
-    @media (min-width: 1024px) {
+@media (min-width: 1024px) {
+    .container {
         padding: 0 32px;
     }
+}
+
+.first-element-gradient {
+    @apply first:bg-gradient-to-r first:from-[#191A23] first:to-[#2A2B38] first:text-white p-8;
+}
+
+.quizSbtn {
+    @apply relative inline-block px-6 py-3 text-sm font-bold rounded-lg shadow-sm transition-transform transform active:translate-y-1 border-b-4 text-gray-900 bg-gray-100 border-gray-300 hover:bg-gray-200;
+}
+
+.quizPbtn {
+    @apply relative inline-block px-6 py-3 text-sm font-bold rounded-lg shadow-sm transition-transform transform active:translate-y-1 border-b-4 text-white bg-gray-800 border-gray-900 hover:bg-gray-700 disabled:translate-y-0 disabled:bg-gray-400 disabled:border-gray-500 disabled:shadow-none
+}
+
+.title { 
+    @apply px-4 py-1 bg-blue-400 text-2xl md:text-4xl w-fit rounded font-bold text-gray-900  
 }

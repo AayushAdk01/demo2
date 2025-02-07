@@ -1,9 +1,10 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import Link from "next/link";
 
 function Navbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 bg-black py-6 shadow-lg">
@@ -47,21 +48,21 @@ function Navbar() {
           </button>
         </form>
 
-        {/* Navigation Links */}
+        {/* Navigation Links (Desktop) */}
         <div className="hidden md:flex space-x-4">
           <Link href="/quiz">
             <span className="text-white hover:underline">Quiz</span>
           </Link>
-          <Link href="/login">
+          <Link href="#">
             <span className="text-white hover:underline">Login</span>
           </Link>
-          <Link href="/register">
+          <Link href="#">
             <span className="text-white hover:underline">Register</span>
           </Link>
-          <Link href="/plans">
+          <Link href="#">
             <span className="text-white hover:underline">Plans & Services</span>
           </Link>
-          <Link href="/help">
+          <Link href="#">
             <span className="text-white hover:underline">Help</span>
           </Link>
         </div>
@@ -69,7 +70,7 @@ function Navbar() {
         {/* Mobile Menu Icon */}
         <div className="md:hidden">
           <button
-            onClick={() => setIsSearchOpen(!isSearchOpen)}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="text-white"
           >
             <svg
@@ -88,6 +89,61 @@ function Navbar() {
             </svg>
           </button>
         </div>
+
+        {/* Mobile Menu (Sliding Sidebar) */}
+        <div
+          className={`fixed inset-y-0 right-0 w-64 bg-black transform transition-transform duration-300 ease-in-out z-50 ${
+            isMenuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          <div className="flex justify-end p-4">
+            <button onClick={() => setIsMenuOpen(false)} className="text-white">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+
+          {/* Navigation Links (Mobile) */}
+          <div className="flex flex-col space-y-4 p-4">
+            <Link href="/quiz">
+              <span className="text-white hover:underline">Quiz</span>
+            </Link>
+            <Link href="#">
+              <span className="text-white hover:underline">Login</span>
+            </Link>
+            <Link href="#">
+              <span className="text-white hover:underline">Register</span>
+            </Link>
+            <Link href="#">
+              <span className="text-white hover:underline">
+                Plans & Services
+              </span>
+            </Link>
+            <Link href="#">
+              <span className="text-white hover:underline">Help</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* Overlay for Mobile Menu */}
+        {isMenuOpen && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 z-40"
+            onClick={() => setIsMenuOpen(false)}
+          />
+        )}
       </div>
     </header>
   );

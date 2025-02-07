@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 type PbtnType = {
   message: string;
@@ -15,13 +16,12 @@ function Pbtn({ message, toDestination, theme = "light" }: PbtnType) {
     <div>
       <Link
         href={toDestination}
-        className={`relative inline-block px-6 py-3 text-sm font-bold rounded-lg shadow-lg transition-transform transform hover:translate-y-1 
+        className={`relative inline-block px-6 py-3 text-sm font-bold rounded-lg shadow-lg transition-transform transform active:translate-y-1 
         ${
           isDark
             ? "text-white bg-gray-800 border-b-4 border-gray-900 hover:bg-gray-700"
             : "text-gray-900 bg-gray-100 border-b-4 border-gray-300 hover:bg-gray-200"
         }`}
-        
       >
         {message}
       </Link>
