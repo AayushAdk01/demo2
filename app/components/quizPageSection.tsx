@@ -183,8 +183,8 @@ export default function QuizPageSection({ Quizes }: any) {
           <button className="quizPbtn">Continue to Next Level</button>
         </div>
         <div>
-          <h1 className="title">LeaderBoard</h1>
-          <p>Check our top performer</p>
+          {/* <h1 className="title">LeaderBoard</h1>
+          <p>Check our top performer</p> */}
           <LeaderBoard player={1} friends={[2, 4, 9]} />
         </div>
       </div>

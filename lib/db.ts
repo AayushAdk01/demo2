@@ -27,7 +27,7 @@ export const Players = [
     player_id: 4,
     name: "Rajesh Sharma",
     level: 5,
-    point: 30000,
+    point: 50000,
     streak: 2,
     friends: [2, 6], // Friends with Manoj and Bibek
   },
