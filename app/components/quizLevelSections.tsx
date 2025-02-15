@@ -2,12 +2,16 @@ import React from "react";
 import { levels } from "@/lib/db";
 import QuizLevelCard from "./quizLevelCard";
 import { a } from "framer-motion/client";
+import fetchLevels from "@/lib/fetchLevels";
 
 type quizLevelSectionsType = {
   currentLevel: number;
 };
 
-function QuizLevelSections({ currentLevel }: quizLevelSectionsType) {
+async function QuizLevelSections({ currentLevel }: quizLevelSectionsType) {
+  const data = await fetchLevels();
+  const test = typeof data;
+
   const filteredLevels = levels
     .filter((level) => level.levelnumber <= currentLevel)
     .sort((a, b) => b.levelnumber - a.levelnumber);
@@ -23,7 +27,8 @@ function QuizLevelSections({ currentLevel }: quizLevelSectionsType) {
         </p>
       </div>
       <div className=" container grid lg:gap-16  gap-8  ">
-        {filteredLevels.map((level) => (
+        {test}
+        {/* {filteredLevels.map((level) => (
           <QuizLevelCard
             key={level.levelnumber}
             levelNumber={level.levelnumber}
@@ -31,7 +36,7 @@ function QuizLevelSections({ currentLevel }: quizLevelSectionsType) {
             levelName={level.title}
             currentLevel={currentLevel}
           />
-        ))}
+        ))} */}
       </div>
     </div>
   );

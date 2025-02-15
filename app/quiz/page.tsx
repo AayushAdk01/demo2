@@ -53,7 +53,7 @@ function QuizHomePage() {
 
       {/* Quiz Level Section */}
       <div className="QuizSection mt-16">
-        <QuizLevelSections currentLevel={3} />
+        <QuizLevelSections currentLevel={1} />
       </div>
 
       {/* Leaderboard Section */}

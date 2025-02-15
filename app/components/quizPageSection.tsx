@@ -59,7 +59,6 @@ export default function QuizPageSection({ Quizes }: any) {
         </h2>
         <p className="mb-6">
           Question : {questionNumber + 1}/{len}
-          Score : {score}
         </p>
       </div>
       <div className="container">

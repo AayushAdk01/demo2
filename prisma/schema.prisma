@@ -1,14 +1,47 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model level {
+  Level_Id     Int      @id @default(autoincrement())
+  Level_Title  String
+  Level_number Int
+  player       player[]
+}
+
+model milestone {
+  Milestone_Id          Int      @id @default(autoincrement())
+  Milestone_Title       String
+  Milestone_description String
+  player                player[]
+}
+
+model player {
+  Player_ID    Int        @id @default(autoincrement())
+  Player_name  String
+  Playerpoint  Int
+  streak       Int
+  lastLogin    DateTime
+  Level_Id     Int?
+  Milestone_Id Int?
+  Temp_Score   Int        @default(-1)
+  user_Id      Int        @unique(map: "Player_user_Id_key")
+  level        level?     @relation(fields: [Level_Id], references: [Level_Id], map: "Player_Level_Id_fkey")
+  milestone    milestone? @relation(fields: [Milestone_Id], references: [Milestone_Id], map: "Player_Milestone_Id_fkey")
+  user         user       @relation(fields: [user_Id], references: [User_Id], map: "Player_user_Id_fkey")
+
+  @@index([Level_Id], map: "Player_Level_Id_fkey")
+  @@index([Milestone_Id], map: "Player_Milestone_Id_fkey")
+}
+
+model user {
+  User_Id  Int     @id @default(autoincrement())
+  Username String
+  Password String
+  player   player?
 }
