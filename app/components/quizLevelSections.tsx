@@ -2,15 +2,15 @@ import React from "react";
 import { levels } from "@/lib/db";
 import QuizLevelCard from "./quizLevelCard";
 import { a } from "framer-motion/client";
-import fetchLevels from "@/lib/fetchLevels";
+// import fetchLevels from "@/lib/fetchLevels";
 
 type quizLevelSectionsType = {
   currentLevel: number;
 };
 
 async function QuizLevelSections({ currentLevel }: quizLevelSectionsType) {
-  const data = await fetchLevels();
-  const test = typeof data;
+  // const data = await fetchLevels();
+  // const test = typeof data;
 
   const filteredLevels = levels
     .filter((level) => level.levelnumber <= currentLevel)
@@ -27,7 +27,7 @@ async function QuizLevelSections({ currentLevel }: quizLevelSectionsType) {
         </p>
       </div>
       <div className=" container grid lg:gap-16  gap-8  ">
-        {test}
+        {/* {test} */}
         {/* {filteredLevels.map((level) => (
           <QuizLevelCard
             key={level.levelnumber}
