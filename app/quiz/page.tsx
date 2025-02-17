@@ -6,21 +6,21 @@ import Image from "next/image";
 import WhyplaySection from "./whyplaySection";
 import QuizLevelSections from "../components/quizLevelSections";
 import LeaderBoard from "../components/leaderBoard";
-import InvitePopup from "../components/InvitePopup"; // Import the popup component
+import InvitePopup from "../components/InvitePopup";
 
 function QuizHomePage() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [inviteLink, setInviteLink] = useState("");
 
- // pages/QuizHomePage.js
-const handleInviteClick = () => {
-  console.log("Button clicked"); // Add this line to debug
-  const token = Math.random().toString(36).substring(2, 15); // Random string
-  const baseUrl = window.location.origin; // Get the current domain
-  const link = `${baseUrl}/invite?token=${token}`; // Construct the invite link
-  setInviteLink(link); // Set the invite link
-  setIsPopupOpen(true); // Open the popup
-};
+  // pages/QuizHomePage.js
+  const handleInviteClick = () => {
+    console.log("Button clicked"); // Add this line to debug
+    const token = Math.random().toString(36).substring(2, 15); // Random string
+    const baseUrl = window.location.origin; // Get the current domain
+    const link = `${baseUrl}/invite?token=${token}`; // Construct the invite link
+    setInviteLink(link); // Set the invite link
+    setIsPopupOpen(true); // Open the popup
+  };
 
   const closePopup = () => {
     setIsPopupOpen(false);
@@ -46,13 +46,8 @@ const handleInviteClick = () => {
             {/* Buttons */}
             <div className="flex justify-center md:justify-start space-x-4 intersect:motion-preset-slide-up motion-delay-200 intersect-once">
               <Pbtn message="Start Quiz" toDestination="quiz/1" theme="dark" />
-            </div>
-            <div className="flex justify-center md:justify-start space-x-4 intersect:motion-preset-slide-up motion-delay-200 intersect-once">
-              <Pbtn
-                message="Invite Friends"
-                onClick={handleInviteClick} // Add onClick handler
-                theme="dark"
-              />
+              <InvitePopup />
+
             </div>
           </div>
 
@@ -85,10 +80,16 @@ const handleInviteClick = () => {
         <LeaderBoard player={1} friends={[2, 4, 9]} />
       </div>
 
-      {/* Popup */}
-      {isPopupOpen && <InvitePopup onClose={closePopup} inviteLink={inviteLink} />}
+
     </div>
   );
 }
 
 export default QuizHomePage;
+
+export function Page() {
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+    </div>
+  );
+}
