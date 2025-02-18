@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+  url      = "mysql://root:Kalika.123@localhost:3306/guhuza_quiz"
 }
 
 model level {
@@ -18,6 +18,8 @@ model milestone {
   Milestone_Id          Int      @id @default(autoincrement())
   Milestone_Title       String
   Milestone_description String
+  UnlockingLevel        Int
+  UploadRequired        Boolean
   player                player[]
 }
 

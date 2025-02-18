@@ -2,15 +2,20 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useContext } from "react";
+import { playerContext } from "../context/playerContext";
 
 function SignUp() {
   const router = useRouter();
+  const { AssignPlayerData} = useContext(playerContext)
   // Form state variables
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+
   // Show/hide password toggle
   const [showPassword, setShowPassword] = useState(false);
+
   // Loading and error states
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -26,22 +31,28 @@ function SignUp() {
     setError("");
     setLoading(true);
     try {
-      //   const res = await fetch("/api/signup", {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify({ username, password, name }),
-      //   });
+      
+      const reponse = await fetch("/api/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          name,
+          password,
+        }),
+      });
 
-      //   if (!res.ok) {
-      //     const data = await res.json();
-      //     throw new Error(data.error || "Something went wrong!");
-      //   }
-
-      // If sign-up is successful, you can redirect the user or show a success message
-      router.push("/quiz");
-      console.log("User created successfully!");
+      if (reponse.ok) {
+        const data = await reponse.json()
+        AssignPlayerData(data.player)
+        router.push("/quiz");
+        console.log("User created successfully!");
+      } else {
+        const errorData = await reponse.json();
+        console.log(errorData.message);
+      }
 
       setUsername("");
       setPassword("");

@@ -1,12 +1,12 @@
-// pages/QuizHomePage.js
-"use client"; // Mark this as a Client Component
-import React, { useState } from "react";
+
+import React from "react";
 import Pbtn from "../components/buttons/primarybtn";
 import Image from "next/image";
 import WhyplaySection from "./whyplaySection";
 import QuizLevelSections from "../components/quizLevelSections";
 import LeaderBoard from "../components/leaderBoard";
-import InvitePopup from "../components/InvitePopup";
+import ProfileHerosection from "../components/profileHerosection";
+
 
 function QuizHomePage() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -64,6 +64,7 @@ function QuizHomePage() {
           </div>
         </div>
       </div>
+
 
       {/* Why Play Section */}
       <div className="whyplay">

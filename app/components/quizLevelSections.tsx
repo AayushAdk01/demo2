@@ -1,22 +1,34 @@
-import React from "react";
-import { levels } from "@/lib/db";
+
+import React, { useContext, useEffect } from "react";
 import QuizLevelCard from "./quizLevelCard";
-import { a } from "framer-motion/client";
-// import fetchLevels from "@/lib/fetchLevels";
+import fetchLevels from "@/utils/fLevels";
+import { playerContext } from "../context/playerContext";
+import { usePlayer } from "../context/playerContext";
+import QuizList from "./quizList";
+
 
 type quizLevelSectionsType = {
   currentLevel: number;
 };
 
-async function QuizLevelSections({ currentLevel }: quizLevelSectionsType) {
-  // const data = await fetchLevels();
-  // const test = typeof data;
+type levelType = {
+  Level_Id: number;
+  Level_Title: string;
+  Level_number: number;
+};
 
-  const filteredLevels = levels
-    .filter((level) => level.levelnumber <= currentLevel)
-    .sort((a, b) => b.levelnumber - a.levelnumber);
+type levelsType = levelType[];
+
+async function QuizLevelSections({ currentLevel }: quizLevelSectionsType) {
+
+  
+  const levels: levelsType = (await fetchLevels()) || [];
+  
+
+ 
   return (
     <div className="space-y-8 ">
+      
       <div className=" container flex lg:gap-12 flex-wrap ">
         <h2 className=" px-4 lg:py-1 bg-blue-400 text-4xl w-fit  rounded font-bold text-gray-900 lg:mb-10 mb-4">
           Your Journey{" "}
@@ -27,16 +39,19 @@ async function QuizLevelSections({ currentLevel }: quizLevelSectionsType) {
         </p>
       </div>
       <div className=" container grid lg:gap-16  gap-8  ">
-        {/* {test} */}
         {/* {filteredLevels.map((level) => (
           <QuizLevelCard
-            key={level.levelnumber}
-            levelNumber={level.levelnumber}
-            levelLink={`quiz/${level.link}`}
-            levelName={level.title}
+            key={level.Level_Id}
+            levelNumber={level.Level_Id}
+            levelLink={`quiz/${level.Level_Id}`}
+            levelName={level.Level_Title}
             currentLevel={currentLevel}
           />
         ))} */}
+        <QuizList 
+  allLevels={levels}
+/>
+
       </div>
     </div>
   );

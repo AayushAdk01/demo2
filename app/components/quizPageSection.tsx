@@ -3,7 +3,10 @@ import React, { use, useState } from "react";
 import QuizCard from "./quizCard";
 import { div } from "framer-motion/client";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import LeaderBoard from "./leaderBoard";
+import { useContext } from "react";
+import { playerContext } from "../context/playerContext";
 type quizeType = {
   question: string;
   comment: string;
@@ -11,10 +14,13 @@ type quizeType = {
   answers: string[];
 };
 
-const handleCheck = () => {};
 
-export default function QuizPageSection({ Quizes }: any) {
+export default function QuizPageSection({ Quizes, levelNumber, levelTitle}: any) {
+
+
+  const {AssignPlayerData, setPlayerLevel, player} = useContext(playerContext)
   const len = Quizes.length;
+  const router = useRouter()
   const [score, setScore] = useState<number>(0);
   const [questionNumber, setQuestionNumber] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(-1);
@@ -32,14 +38,53 @@ export default function QuizPageSection({ Quizes }: any) {
     setUsedHint(false);
     setRetried(false);
   };
+
+  const handleNextLevel = async () =>  {
+    const newlevel =Number(levelNumber) +1
+    const finalScore = score + player.Playerpoint
+    const playerId = player.Player_ID
+
+
+    try {
+      const response = await fetch("/api/updateScore", { 
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ playerId,finalScore,newlevel  }),
+      });
+
+      if (response.ok) {
+          const data = await response.json();
+          console.log("User updated in successfully!", data);
+          AssignPlayerData(data.player);
+          setPlayerLevel(data.player.Level_Id)
+          router.push(`/quiz/${newlevel}` )
+          console.log(data.newlevel)
+          console.log(player)
+
+          
+          
+      } else {
+          const errorData = await response.json();
+          console.error("Login failed:", errorData.message);
+         
+          
+      }
+  } catch (error) {
+      console.error("An error occurred during login:", error);
+     
+     
+  }
+  }
   const handleScore = () => {
     setAnswerChecked(true);
 
     if (selectedAnswer == quizer.test_answer) {
       if (retried) {
-        setScore(score + 1);
+        setScore(score + 10);
       } else {
-        setScore(score + 3);
+        setScore(score + 30);
       }
     }
   };
@@ -55,7 +100,7 @@ export default function QuizPageSection({ Quizes }: any) {
     <div className="md:py-16 py-8">
       <div className="container flex  justify-between flex-wrap">
         <h2 className=" md:mb-16 mb-4 title intersect: motion-preset-slide-up motion-delay-200 intersect-once">
-          Level 1: The first Step
+          Level { levelNumber} : {levelTitle} 
         </h2>
         <p className="mb-6">
           Question : {questionNumber + 1}/{len}
@@ -179,7 +224,7 @@ export default function QuizPageSection({ Quizes }: any) {
           <p>Total Score = {55 + score} </p>
           <button> Retry Same Lesson</button>
           <button> Share Score on social Media</button>
-          <button className="quizPbtn">Continue to Next Level</button>
+          <button className="quizPbtn" onClick={handleNextLevel}>Continue to Next Level</button>
         </div>
         <div>
           {/* <h1 className="title">LeaderBoard</h1>

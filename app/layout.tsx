@@ -6,6 +6,8 @@ import Navbar from "@/app/components/navbar";
 import ObserverProvider from "./components/ObserverPovider";
 import Footer from "./components/footer";
 import NextTopLoader from "nextjs-toploader";
+import PlayerContextProvider from "./context/playerContext";
+
 
 const inter = Inter({ subsets: ["latin"] });
 const spacegrotesk = Space_Grotesk({ subsets: ["latin"] });
@@ -25,9 +27,11 @@ export default function RootLayout({
         <NextTopLoader />
 
         <ObserverProvider>
+          <PlayerContextProvider>
           <Navbar />
           {children}
           <Footer />
+          </PlayerContextProvider>
         </ObserverProvider>
       </body>
     </html>
