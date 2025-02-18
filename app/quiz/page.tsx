@@ -1,30 +1,18 @@
+// pages/QuizHomePage.js
+"use client"; // Mark this as a Client Component
+import React, { useState } from "react";
 
-import React from "react";
 import Pbtn from "../components/buttons/primarybtn";
 import Image from "next/image";
 import WhyplaySection from "./whyplaySection";
 import QuizLevelSections from "../components/quizLevelSections";
 import LeaderBoard from "../components/leaderBoard";
+import InvitePopup from "../components/InvitePopup";
 import ProfileHerosection from "../components/profileHerosection";
 
 
 function QuizHomePage() {
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [inviteLink, setInviteLink] = useState("");
-
-  // pages/QuizHomePage.js
-  const handleInviteClick = () => {
-    console.log("Button clicked"); // Add this line to debug
-    const token = Math.random().toString(36).substring(2, 15); // Random string
-    const baseUrl = window.location.origin; // Get the current domain
-    const link = `${baseUrl}/invite?token=${token}`; // Construct the invite link
-    setInviteLink(link); // Set the invite link
-    setIsPopupOpen(true); // Open the popup
-  };
-
-  const closePopup = () => {
-    setIsPopupOpen(false);
-  };
+  
 
   return (
     <div className="mt-10">
