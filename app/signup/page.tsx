@@ -7,7 +7,8 @@ import { playerContext } from "../context/playerContext";
 
 function SignUp() {
   const router = useRouter();
-  const { AssignPlayerData} = useContext(playerContext)
+  const { AssignPlayerData, tempScore, setTempScore} = useContext(playerContext)
+  
   // Form state variables
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -28,6 +29,7 @@ function SignUp() {
   // Handle sign-up form submission
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("tiggered")
     setError("");
     setLoading(true);
     try {
@@ -41,12 +43,14 @@ function SignUp() {
           username,
           name,
           password,
+          tempScore,
         }),
       });
 
       if (reponse.ok) {
         const data = await reponse.json()
         AssignPlayerData(data.player)
+        setTempScore(0)
         router.push("/quiz");
         console.log("User created successfully!");
       } else {

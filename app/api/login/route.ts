@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import { cookies } from "next/headers";
 
 export async function POST(req: Request) {
     try {
@@ -40,7 +41,12 @@ export async function POST(req: Request) {
         if (!player) {
             return NextResponse.json({ message: "Player data not found for this user" }, { status: 404 });
         }
+        if (player) { 
+            const cookieStore =  cookies()
+            cookieStore.set('LoggedIn', 'true', { secure: true , httpOnly:true,sameSite:"strict", path:"/", })
+            cookieStore.set('PlayerLevel', String(player.Level_Id), { secure: true , httpOnly:true,sameSite:"strict", path:"/", })
 
+        }
         return NextResponse.json({ message: "Login successful", player: player }, { status: 200 });
 
     } catch (error) {

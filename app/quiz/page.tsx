@@ -9,69 +9,62 @@ import QuizLevelSections from "../components/quizLevelSections";
 import LeaderBoard from "../components/leaderBoard";
 import InvitePopup from "../components/InvitePopup";
 import ProfileHerosection from "../components/profileHerosection";
+import ShareButton from "../components/buttons/sharebtn";
+import QuizHero from "../components/quizHero";
+import fetchPlayers from "@/utils/fPlayers";
+import { auth } from "@/auth";
+import LogoutButton from "../components/buttons/logoutBtn";
+import LoginButton from "../components/buttons/loginBtn";
+import { FectUser } from "@/utils/fUser";
 
 
-function QuizHomePage() {
+
+async function  QuizHomePage() {
+  const players = (await fetchPlayers() || [])
+  const session = await auth()
+  
+if ( session ){
+  const user = session.user
+  
+  const player = await FectUser(Number(user?.memberId),user?.name , user?.email )
   
 
   return (
     <div className="mt-10">
+      
+      {player?.Player_name}
+      
       {/* Hero Section */}
-      <div className="container mx-auto px-4 py-16 mt-10 bg-white">
-        <div className="flex flex-col md:flex-row items-center">
-          {/* Text Section */}
-          <div className="md:w-1/2 space-y-6 text-center md:text-left">
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-800 intersect:motion-preset-slide-up motion-delay-200 intersect-once">
-              Level Up Your Job Search with Guhuza Quiz Game
-            </h1>
-
-            <p className="text-gray-600 text-lg intersect:motion-preset-slide-up motion-delay-300 intersect-once">
-              A fun and interactive way to sharpen your skills, earn rewards,
-              and stand out in your career journey. Compete, learn, and win as
-              you take your job search to the next level!
-            </p>
-
-            {/* Buttons */}
-            <div className="flex justify-center md:justify-start space-x-4 intersect:motion-preset-slide-up motion-delay-200 intersect-once">
-              <Pbtn message="Start Quiz" toDestination="quiz/1" theme="dark" />
-              <InvitePopup />
-
-            </div>
-          </div>
-
-          {/* Image Section */}
-          <div className="mt-8 md:mt-0 md:w-1/2 flex justify-center">
-            <Image
-              src="/Images/herosection/heroimage.webp"
-              alt="A person giving an interview and smiling"
-              className="rounded-md shadow-lg w-full hidden lg:max-w-lg md:block intersect:motion-preset-blur-right-sm motion-delay-200 intersect-once "
-              width={500}
-              height={300}
-              priority // Add priority for above-the-fold images
-            />
-          </div>
-        </div>
-      </div>
-
-
+   
+      <QuizHero />
+     
       {/* Why Play Section */}
       <div className="whyplay">
         <WhyplaySection />
       </div>
+user id : {user?.memberId}
 
       {/* Quiz Level Section */}
       <div className="QuizSection mt-16">
-        <QuizLevelSections currentLevel={1} />
+        <QuizLevelSections />
       </div>
 
       {/* Leaderboard Section */}
       <div className="leaderboard section container">
-        <LeaderBoard player={1} friends={[2, 4, 9]} />
+        <LeaderBoard Players={players}  />
       </div>
 
 
     </div>
   );
+} 
+return ( 
+  <div className="container"> 
+    You are logged out 
+    <LoginButton/>
+  </div>
+)
+  
 }
 
 export default QuizHomePage;

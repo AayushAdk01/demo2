@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import SessionProvider from "./components/SessionProvider";
+import { auth } from "@/auth";
 import Navbar from "@/app/components/navbar";
 import ObserverProvider from "./components/ObserverPovider";
 import Footer from "./components/footer";
 import NextTopLoader from "nextjs-toploader";
 import PlayerContextProvider from "./context/playerContext";
-
 
 const inter = Inter({ subsets: ["latin"] });
 const spacegrotesk = Space_Grotesk({ subsets: ["latin"] });
@@ -16,23 +17,27 @@ export const metadata: Metadata = {
   description: "Level Up Your Job Search with Guhuza Quiz Game",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const session = await auth()
+
   return (
     <html lang="en">
       <body className={spacegrotesk.className}>
         <NextTopLoader />
-
+        <SessionProvider session={session}>
         <ObserverProvider>
           <PlayerContextProvider>
-          <Navbar />
-          {children}
-          <Footer />
+            <Navbar />
+            {children}
+            <Footer />
           </PlayerContextProvider>
         </ObserverProvider>
+        </SessionProvider>
       </body>
     </html>
   );

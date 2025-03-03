@@ -37,7 +37,7 @@ function ProfileHerosection() {
     if ((player?.milestone?.UnlockingLevel - player?.Level_Id) < 0) {
       return <span></span>
     } else {
-      return <span>(player?.milestone.UnlockingLevel - player?.Level_Id).toString</span>
+      return <span>(player?.milestone.?UnlockingLevel - player?.Level_Id).toString</span>
     }
   }
 
@@ -48,11 +48,11 @@ function ProfileHerosection() {
   return (
     <div className="container mx-auto max-w-6xl">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Hello {player?.Player_name}</h1>
-      <div className="flex flex-col md:flex-row gap-8 md:gap-12">
+      <div className="flex flex-col flex-wrap md:flex-row gap-8 md:gap-12">
         <div className="flex-1">
           {/* Stats Card */}
           <div className="  rounded-lg  bg-blue-50   ">
-            <div className="grid grid-cols-3  py-6">
+            <div className="grid grid-cols-3 min  py-6">
               <div className="text-center">
                 <p className="text-gray-500 text-sm mb-1">Ranking</p>
                 <p className="text-5xl font-bold text-gray-800">12 </p>
@@ -89,11 +89,12 @@ function ProfileHerosection() {
             </div>
           </div>
 
-          <div className="">
-            <p className="text-gray-600 mb-4">
-              Solve {((player?.milestone?.UnlockingLevel - player?.Level_Id) < 0 ? 0 : player?.milestone.UnlockingLevel - player?.Level_Id).toString()} more questions to get your reward
+          <div className="py-4 mb:py-0">
+            <p className="text-gray-600 ">
+              Solve {((player?.milestone?.UnlockingLevel - player?.Level_Id) < 0 ? 0 : player?.milestone?.UnlockingLevel - player?.Level_Id).toString()} more level to get your reward
             </p>
-            <ProgressBar percentage={(player?.milestone?.UnlockingLevel - player?.Level_Id) < 0 ? 100 :(player?.Level_Id / player?.milestone.UnlockingLevel) * 100} />
+            <p className="mb-4 font-semibold ">{player?.milestone?.Milestone_Title}</p>
+            <ProgressBar percentage={(player?.milestone?.UnlockingLevel - player?.Level_Id) < 0 ? 100 :(player?.Level_Id / player?.milestone?.UnlockingLevel) * 100} />
             <button className="quizPbtn mt-4" disabled={player?.Level_Id < player?.milestone?.UnlockingLevel} onClick={handleClaimReward}>
               Claim Reward
             </button>

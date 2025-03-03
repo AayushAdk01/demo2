@@ -1,10 +1,10 @@
 
-import React, { useContext, useEffect } from "react";
+import React, { Suspense, useContext, useEffect } from "react";
 import QuizLevelCard from "./quizLevelCard";
 import fetchLevels from "@/utils/fLevels";
 import { playerContext } from "../context/playerContext";
-import { usePlayer } from "../context/playerContext";
 import QuizList from "./quizList";
+import Link from "next/link";
 
 
 type quizLevelSectionsType = {
@@ -19,7 +19,7 @@ type levelType = {
 
 type levelsType = levelType[];
 
-async function QuizLevelSections({ currentLevel }: quizLevelSectionsType) {
+async function QuizLevelSections() {
 
   
   const levels: levelsType = (await fetchLevels()) || [];
@@ -38,20 +38,14 @@ async function QuizLevelSections({ currentLevel }: quizLevelSectionsType) {
           Challenges will appear as you grow
         </p>
       </div>
-      <div className=" container grid lg:gap-16  gap-8  ">
-        {/* {filteredLevels.map((level) => (
-          <QuizLevelCard
-            key={level.Level_Id}
-            levelNumber={level.Level_Id}
-            levelLink={`quiz/${level.Level_Id}`}
-            levelName={level.Level_Title}
-            currentLevel={currentLevel}
-          />
-        ))} */}
-        <QuizList 
-  allLevels={levels}
+      <div className=" container grid  lg:gap-16  gap-8  ">
+        <Suspense fallback = {<div>Loading....</div>}>
+        <QuizList  cutEnding = {true}
+  allLevels={levels} 
 />
+</Suspense>
 
+<Link href={"/allquiz"} className="font-semibold underline text-center">View All Quiz</Link>
       </div>
     </div>
   );

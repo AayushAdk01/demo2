@@ -1,5 +1,8 @@
-"use client"
+"use client"; // ✅ Ensures this is a client component
+
 import { createContext, useContext, useEffect, useState } from "react";
+import { cookies } from 'next/headers'
+
 
 type typePlayer = {
   Level_Id: number;
@@ -11,33 +14,36 @@ type typePlayer = {
   lastLogin: Date;
   streak: number;
   user_Id: number;
-}
+};
 
 export const playerContext = createContext<any>(null);
 
 function PlayerContextProvider({ children }: { children: React.ReactNode }) {
-  // Initialize state with localStorage data if available
-  const [player, setPlayer] = useState<typePlayer | null>(() => {
-    if (typeof window !== 'undefined') {
-      const savedPlayer = localStorage.getItem('player');
-      return savedPlayer ? JSON.parse(savedPlayer, (key, value) => {
-        if (key === 'lastLogin') return new Date(value);
-        return value;
-      }) : null;
+  const [player, setPlayer] = useState<typePlayer | null>(null); 
+  const [tempScore, setTempScore] = useState(0);
+
+  useEffect(() => {
+    try {
+      const storedPlayer = localStorage.getItem("player");
+      if (storedPlayer) {
+        setPlayer(JSON.parse(storedPlayer));
+        
+
+      }
+    } catch (error) {
+      console.error("Failed to parse player data:", error);
     }
-    return null;
-  });
+  }, []);
 
-  const [tempScore, setTempScore] = useState(-1);
-
-  // Save to localStorage whenever player changes
   useEffect(() => {
     if (player !== null) {
-      localStorage.setItem('player', JSON.stringify(player));
+      localStorage.setItem("player", JSON.stringify(player));
+
+      
     }
   }, [player]);
 
-  const AssignPlayerData = (playerData: typePlayer) => { 
+  const AssignPlayerData = (playerData: typePlayer) => {
     setPlayer(playerData);
   };
 
@@ -46,23 +52,15 @@ function PlayerContextProvider({ children }: { children: React.ReactNode }) {
     AssignPlayerData,
     playerLevel: player?.Level_Id,
     setPlayerLevel: (newLevel: number) => {
-      setPlayer(prev => prev ? {...prev, Level_Id: newLevel} : null);
-    }
+      setPlayer((prev) => (prev ? { ...prev, Level_Id: newLevel } : null));
+    },
+    setTempScore,
+    tempScore,
   };
 
   return (
-    <playerContext.Provider value={value}>
-      {children}
-    </playerContext.Provider>
+    <playerContext.Provider value={value}>{children}</playerContext.Provider>
   );
 }
 
 export default PlayerContextProvider;
-
-export function usePlayer() { 
-  const context = useContext(playerContext);
-  if (!context) {
-    throw new Error('usePlayer must be used within a PlayerContextProvider');
-  }
-  return context;
-}

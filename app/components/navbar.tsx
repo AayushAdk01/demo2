@@ -53,14 +53,14 @@ function Navbar() {
           <Link href="/quiz">
             <span className="text-white hover:underline">Quiz</span>
           </Link>
-          <Link href="#">
+          <Link href="/">
             <span className="text-white hover:underline">Login</span>
           </Link>
-          <Link href="#">
+          <Link href="/signup">
             <span className="text-white hover:underline">Register</span>
           </Link>
-          <Link href="#">
-            <span className="text-white hover:underline">Plans & Services</span>
+          <Link href="/profile">
+            <span className="text-white hover:underline">Profile</span>
           </Link>
           <Link href="#">
             <span className="text-white hover:underline">Help</span>

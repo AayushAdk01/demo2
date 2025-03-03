@@ -16,7 +16,7 @@ function QuizLevelCard({
 }: QuizLevelCardTypes) {
   return (
     <div
-      className={`levelContainer rounded-lg p-6 border-b-4 border-2   lg:w-1/2 duration-300  lg:even:ml-auto
+      className={`levelContainer rounded-lg p-6 border-b-4 border-2  mt-10  lg:w-1/2 duration-300  lg:even:ml-auto
                   first-element-gradient intersect:motion-preset-slide-up-lg motion-delay-${
                     1000 - levelNumber * 100
                   }  intersect-once `}

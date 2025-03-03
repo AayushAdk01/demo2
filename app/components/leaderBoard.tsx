@@ -1,100 +1,99 @@
 
 
-import { Players } from "@/lib/db";
-
-type Player = {
-  player_id: number;
-  name: string;
-  point: number;
-  level: number;
-  streak: number;
-  friends: number[];
-};
-
-type LeaderBoardProps = {
+type leaderBoardType = {
   player: number;
   friends: number[];
 };
+import { useContext } from "react";
+import { playerContext } from "../context/playerContext";
 
-export default function LeaderBoard({ player, friends }: LeaderBoardProps) {
-  // Create a sorted copy of the players array
-  const sortedPlayers = [...Players].sort((a, b) => b.point - a.point);
+import ShareButton from "./buttons/sharebtn";
 
+type milestoneType = { 
+  Milestone_Id : number, 
+  Milestone_Title : string, 
+  Milestone_description : string , 
+  UnlockingLevel : number, 
+  UploadRequired : boolean, 
+}
+
+type playerType = { 
+  Player_ID :number, 
+  Player_name : string, 
+  Playerpoint : number, 
+  streak : number, 
+  lastLogin : Date, 
+  Level_Id ?: number,
+  Milestone_Id ?: number , 
+  milestone : milestoneType
+}
+
+type PlayersType ={ Players : playerType[] | []}
+
+export default  function LeaderBoard({Players}:PlayersType) {
+  const {player}= useContext(playerContext)
+  
+
+  
+  // Sort players by points in descending order
+  const sortedPlayers = [...Players]?.sort((a, b) => b?.Playerpoint - a?.Playerpoint);
   // Get the top 5 players
-  let topPlayers: Player[] = sortedPlayers.slice(0, 5);
+  let topPlayers = sortedPlayers?.slice(0, 5);
 
-  // Get the current player object
-  const currentPlayer = Players.find((p) => p.player_id === player);
+  // Check if the current player is in the top 5
+  const isPlayerInTop5 = topPlayers?.some((p) => p?.Player_ID === player?.Player_ID);
 
-  // Add the current player if they are not in the top 5 and exist in the database
-  if (currentPlayer && !topPlayers.some((p) => p.player_id === player)) {
-    topPlayers.push(currentPlayer);
+  // If the current player is not in the top 5, add them to the table
+  if (!isPlayerInTop5) {
+    const currentPlayer = Players?.find((p) => p?.Player_ID === player?.Player_ID);
+    if (currentPlayer) {
+      topPlayers.push(currentPlayer); // Replace the 5th player with the current player
+    }
   }
-
-  // Filter out friends who are not in the top 5
-  const friendsToBeAdded = friends
-    .map((friendId) => Players.find((p) => p.player_id === friendId))
-    .filter((friend): friend is Player => friend !== undefined && !topPlayers.some((p) => p.player_id === friend.player_id));
-
-  // Add friends to the leaderboard
-  topPlayers = [...topPlayers, ...friendsToBeAdded];
-
-  // Sort the final leaderboard to ensure proper order
-  topPlayers.sort((a, b) => b.point - a.point);
+ 
 
   return (
-    <div className="py-16 bg-gradient-to-b from-purple-100 to-white min-h-screen flex flex-col items-center">
-      <div className="container max-w-4xl bg-gradient-to-r from-white to-purple-50 p-8 rounded-lg shadow-xl">
-        <h2 className="text-4xl font-bold text-center text-purple-800 mb-4">Leaderboard</h2>
-        <p className="text-center text-gray-700 mb-6">Check out our top performers!</p>
-        <div className="overflow-x-auto mb-10">
-          <table className="min-w-full bg-gray-100 border border-gray-300 rounded-xl shadow-md">
-            <thead>
-              <tr className="bg-purple-800 text-white rounded-t-3xl">
-                <th className="px-6 py-3 text-left font-medium uppercase">Rank</th>
-                <th className="px-6 py-3 text-left font-medium uppercase">Name</th>
-                <th className="px-6 py-3 text-left font-medium uppercase">PCMRTS</th>
-                <th className="px-6 py-3 text-left font-medium uppercase">Level</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-300 mb-10">
-              {topPlayers.map((playerData, index) => {
-                const isCurrentPlayer = playerData.player_id === player;
-                const isFriend = friends.includes(playerData.player_id);
-                const rowClass = isCurrentPlayer
-                  ? "bg-purple-100 font-semibold"
-                  : isFriend
-                  ? "bg-gray-200"
-                  : "";
+    <div className=" py-24">
+     
+      <div className="container">
+        <h2 className="px-4 py-1 text-center bg-blue-400 text-4xl w-fit rounded font-bold text-gray-900 m-auto intersect:motion-preset-slide-up motion-delay-200 intersect-once ">
+          Leader Board
+        </h2>
+        <p className="w-96 m-auto text-center mt-6 mb-10 intersect:motion-preset-slide-up motion-delay-200 intersect-once">
+          Check our top performers
+        </p>
+      </div>
+      <div className="overflow-x-auto">
+      <table className="intersect:motion-preset-slide-up motion-delay-200 intersect-once min-w-full bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden">
+  <thead className="bg-gradient-to-b from-gray-950 to-gray-800 text-white uppercase text-sm font-semibold">
+    <tr>
+      <th className="px-6 py-3 text-left tracking-wider">Name</th>
+      <th className="px-6 py-3 text-left tracking-wider">Points</th>
+      <th className="px-6 py-3 text-left tracking-wider">Level</th>
+      <th className="px-6 py-3 text-left tracking-wider">Upcoming Reward</th>
+    </tr>
+  </thead>
+  <tbody className="divide-y divide-gray-300">
+    {topPlayers.map((playerData) => {
+      const isCurrentPlayer = playerData?.Player_ID === player?.Player_ID;
 
-                // Determine the trophy icon based on rank
-                let trophyIcon = null;
-                if (index === 0) {
-                  trophyIcon = "🥇"; // Gold trophy
-                } else if (index === 1) {
-                  trophyIcon = "🥈"; // Silver trophy
-                } else if (index === 2) {
-                  trophyIcon = "🥉"; // Bronze trophy
-                }
+      const rowClass = isCurrentPlayer
+        && "bg-blue-100 font-semibold text-gray-900"
+        
 
-                return (
-                  <tr key={playerData.player_id} className={`${rowClass} hover:bg-gray-50 transition-all`}>
-                    <td className="px-6 py-4 text-gray-800 font-medium">
-                      {trophyIcon ? (
-                        <span className="text-2xl">{trophyIcon}</span>
-                      ) : (
-                        <span>{index + 1}</span>
-                      )}
-                    </td>
-                    <td className="px-6 py-4 text-gray-800 font-medium">{playerData.name}</td>
-                    <td className="px-6 py-4 text-gray-700">{playerData.point}</td>
-                    <td className="px-6 py-4 text-gray-600">{playerData.level}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+
+      return (
+        <tr key={playerData?.Player_ID} className={`${rowClass} transition-all`}>
+          <td className="px-6 py-4 text-sm ">{playerData?.Player_name}</td>
+          <td className="px-6 py-4 text-sm">{playerData?.Playerpoint}</td>
+          <td className="px-6 py-4 text-sm">{playerData?.Level_Id}</td>
+          <td className="px-6 py-4 text-sm">{playerData?.milestone?.Milestone_Title}</td>
+        </tr>
+      );
+    })}
+  </tbody>
+</table>
+
       </div>
     </div>
   );
