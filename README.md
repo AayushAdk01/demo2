@@ -1,6 +1,7 @@
-# Guhuza Quiz App
+# Guhuza’s Brain Boost
 
-The Guhuza Quiz App is an interactive game designed to engage users with job search-related questions. Players earn points for correct answers, compete on a leaderboard, and share scores on social media to increase visibility. 
+
+The Guhuza’s Brain Boost is an interactive game designed to engage users with job search-related questions. Players earn points for correct answers, compete on a leaderboard, and share scores on social media to increase visibility. 
 
 ## Features
 - **Job Search Quiz**: Users answer job-related questions to earn points.

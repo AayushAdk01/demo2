@@ -20,7 +20,9 @@ model milestone {
   Milestone_Title       String
   Milestone_description String
   UnlockingLevel        Int
-  UploadRequired        Boolean
+  Milestone_reward_message String
+  Milestone_Link String
+  Milestone_Button_CTA String
   player                player[]
 }
 
@@ -32,19 +34,10 @@ model player {
   lastLogin    DateTime
   Level_Id     Int?
   Milestone_Id Int?
-  Temp_Score   Int        @default(-1)
-  user_Id      Int        @unique(map: "Player_user_Id_key")
   level        level?     @relation(fields: [Level_Id], references: [Level_Id], map: "Player_Level_Id_fkey")
   milestone    milestone? @relation(fields: [Milestone_Id], references: [Milestone_Id], map: "Player_Milestone_Id_fkey")
-  user         user       @relation(fields: [user_Id], references: [User_Id], map: "Player_user_Id_fkey")
-
+  
   @@index([Level_Id], map: "Player_Level_Id_fkey")
   @@index([Milestone_Id], map: "Player_Milestone_Id_fkey")
 }
 
-model user {
-  User_Id  Int     @id @default(autoincrement())
-  Username String
-  Password String
-  player   player?
-}

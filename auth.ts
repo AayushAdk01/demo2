@@ -2,6 +2,8 @@ import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { Member } from "./User.interface"
 
+
+
 export const credentialProvider = CredentialsProvider({
     name: 'guhuza',
     credentials: {

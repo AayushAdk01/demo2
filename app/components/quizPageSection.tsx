@@ -15,10 +15,10 @@ type quizeType = {
 };
 import fetchPlayers from "@/utils/fPlayers";
 
-export default function QuizPageSection({ Quizes, levelNumber, levelTitle, players }: any) {
+export default function QuizPageSection({ Quizes, levelNumber, levelTitle, player }: any) {
 
 
-  const { AssignPlayerData, setPlayerLevel, player, setTempScore } = useContext(playerContext)
+  const { AssignPlayerData, setPlayerLevel, setTempScore } = useContext(playerContext)
   const len = Quizes.length;
   const router = useRouter()
   const [score, setScore] = useState<number>(0);
@@ -83,10 +83,7 @@ export default function QuizPageSection({ Quizes, levelNumber, levelTitle, playe
     
   }
 
-const handleGetPlayer = async() => { 
-  const players = await fetchPlayers()
- 
-}
+
   const handleScore = () => {
     setAnswerChecked(true);
 
@@ -97,7 +94,7 @@ const handleGetPlayer = async() => {
         setScore(score + 30);
       }
     }
-    handleGetPlayer()
+   
   };
 
   const handleNextQuestion = () => {
@@ -249,7 +246,7 @@ const handleGetPlayer = async() => {
             <div className="bg-blue-50 rounded border-2 border-blue-100   flex flex-col gap-4 items-center px-6 py-4">
             
               <p className="mt-4 text-xl"> 🏆TOTAL SCORE</p>
-              <h1 className="text-6xl font-bold">{player ? player?.Playerpoint +  score: score}</h1>
+              <h1 className="text-6xl font-bold">{player?.Playerpoint ? player?.Playerpoint +  score: score}</h1>
             </div>
           </div>
           <Image src={"/mascot/proudMascot.svg"} className="mt-8" width={250} alt="Guhuza Bird" height={30} />
@@ -264,21 +261,18 @@ const handleGetPlayer = async() => {
 
           <div className="flex  flex-wrap justify-center gap-6 mt-8">
             <button className="flex  gap-4" onClick={handleRetry}>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
               </svg>
               Retry Same Lesson</button>
-            <button className="flex gap-4">  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
+            <button className="flex gap-4">  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+              <path stroke-linecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
             </svg>
               Share Score on social Media</button>
           </div>
 
         </div>
-        <div>
-        
-          <LeaderBoard Players={players}  />
-        </div>
+       
       </div>
     </div>
   );

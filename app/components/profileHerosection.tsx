@@ -3,9 +3,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useContext } from "react";
-import { playerContext } from "../context/playerContext";
-
 
 type ProgressBarType = {
   percentage: number;
@@ -23,16 +20,38 @@ const ProgressBar = ({ percentage }: ProgressBarType) => {
     </div>
   );
 };
+type milestoneType = {
+  Milestone_Id: number;
+  Milestone_Title: string;
+  Milestone_description: string;
+  UnlockingLevel: number;
+  Milestone_reward_message: string;
+  Milestone_Link:string; 
+  Milestone_Button_CTA : string 
+};
+
+type playerType = {
+  Player_ID: number;
+  Player_name: string;
+  Playerpoint: number;
+  streak: number;
+  lastLogin: Date;
+  Level_Id: number;
+  Milestone_Id?: number;
+  milestone: milestoneType;
+};
+
+
+type typePlayerHeroSection = { 
+  player :  playerType, 
+  playerRank : number
+}
+
+function ProfileHerosection({player, playerRank}: typePlayerHeroSection) {
 
 
 
-
-
-function ProfileHerosection() {
-
-
-
-  const { player } = useContext(playerContext)
+  
   const mileStoneCounter = () => {
     if ((player?.milestone?.UnlockingLevel - player?.Level_Id) < 0) {
       return <span></span>
@@ -55,7 +74,7 @@ function ProfileHerosection() {
             <div className="grid grid-cols-3 min  py-6">
               <div className="text-center">
                 <p className="text-gray-500 text-sm mb-1">Ranking</p>
-                <p className="text-5xl font-bold text-gray-800">12 </p>
+                <p className="text-5xl font-bold text-gray-800">{playerRank} </p>
               </div>
               <div className="text-center">
                 <p className="text-gray-500 text-sm mb-1">Points Earned</p>

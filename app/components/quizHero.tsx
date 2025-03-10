@@ -11,7 +11,7 @@ function QuizHero() {
       {/* Text Section */}
       <div className="md:w-1/2 space-y-6 text-center md:text-left">
         <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-800 intersect:motion-preset-slide-up motion-delay-200 intersect-once">
-          Level Up Your Job Search with Guhuza Quiz Game
+          Level Up Your Job Search with Guhuza’s Brain Boost
         </h1>
 
         <p className="text-gray-600 text-lg intersect:motion-preset-slide-up motion-delay-300 intersect-once">

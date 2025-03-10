@@ -7,6 +7,8 @@ import QuizList from "./quizList";
 import Link from "next/link";
 
 
+
+
 type quizLevelSectionsType = {
   currentLevel: number;
 };
@@ -18,9 +20,11 @@ type levelType = {
 };
 
 type levelsType = levelType[];
+type typeDisplayLevel = {
+  playerLevel :number
+} 
 
-async function QuizLevelSections() {
-
+async function QuizLevelSections({playerLevel} :typeDisplayLevel ) {
   
   const levels: levelsType = (await fetchLevels()) || [];
   
@@ -42,7 +46,9 @@ async function QuizLevelSections() {
         <Suspense fallback = {<div>Loading....</div>}>
         <QuizList  cutEnding = {true}
   allLevels={levels} 
+  playerLevel = {playerLevel}
 />
+
 </Suspense>
 
 <Link href={"/allquiz"} className="font-semibold underline text-center">View All Quiz</Link>

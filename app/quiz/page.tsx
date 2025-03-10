@@ -1,7 +1,4 @@
-// pages/QuizHomePage.js
-"use client"; // Mark this as a Client Component
-import React, { useState } from "react";
-
+import React from "react";
 import Pbtn from "../components/buttons/primarybtn";
 import Image from "next/image";
 import WhyplaySection from "./whyplaySection";
@@ -15,56 +12,68 @@ import fetchPlayers from "@/utils/fPlayers";
 import { auth } from "@/auth";
 import LogoutButton from "../components/buttons/logoutBtn";
 import LoginButton from "../components/buttons/loginBtn";
-import { FectUser } from "@/utils/fUser";
+import fetchUser from "@/utils/fUser";
 
+async function QuizHomePage() {
+  const players = (await fetchPlayers()) || [];
+  const session = await auth();
+  if (session) {
+    const user = session.user;
+    const name = user?.firstName == null ? "Anonymous" :user?.firstName 
 
+    const player = await fetchUser(
+      Number(user?.memberId),
+      name,
+      user?.email || ''
+    );
+    const playerLevel = player?.Level_Id ?? 1;
+    return (
+      <div className="mt-10">
+        {/* Hero Section */}
 
-async function  QuizHomePage() {
-  const players = (await fetchPlayers() || [])
-  const session = await auth()
-  
-if ( session ){
-  const user = session.user
-  
-  const player = await FectUser(Number(user?.memberId),user?.name , user?.email )
-  
+        <QuizHero />
 
+        {/* Why Play Section */}
+        <div className="whyplay">
+          <WhyplaySection />
+        </div>
+
+        {/* Quiz Level Section */}
+        <div className="QuizSection mt-16">
+          <QuizLevelSections playerLevel={playerLevel} />
+        </div>
+
+        {/* Leaderboard Section */}
+        <div className="leaderboard section container">
+          <LeaderBoard  />
+        </div>
+      </div>
+    );
+  }
+
+  const playerLevel = 1
   return (
     <div className="mt-10">
-      
-      {player?.Player_name}
-      
-      {/* Hero Section */}
-   
-      <QuizHero />
-     
-      {/* Why Play Section */}
-      <div className="whyplay">
-        <WhyplaySection />
-      </div>
-user id : {user?.memberId}
+    {/* Hero Section */}
 
-      {/* Quiz Level Section */}
-      <div className="QuizSection mt-16">
-        <QuizLevelSections />
-      </div>
+    <QuizHero />
 
-      {/* Leaderboard Section */}
-      <div className="leaderboard section container">
-        <LeaderBoard Players={players}  />
-      </div>
-
-
+    {/* Why Play Section */}
+    <div className="whyplay">
+      <WhyplaySection />
     </div>
-  );
-} 
-return ( 
-  <div className="container"> 
-    You are logged out 
-    <LoginButton/>
+
+    {/* Quiz Level Section */}
+    <div className="QuizSection mt-16">
+      <QuizLevelSections playerLevel={playerLevel} />
+    </div>
+
+    {/* Leaderboard Section */}
+    <div className="leaderboard section container">
+      <LeaderBoard/>
+    </div>
   </div>
-)
-  
+  );
 }
 
 export default QuizHomePage;

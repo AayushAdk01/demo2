@@ -1,8 +1,8 @@
-"use client"; 
 
-import React, { useContext, useState } from "react";
+
+import React from "react";
 import QuizLevelCard from "./quizLevelCard";
-import { playerContext } from "../context/playerContext";
+import fetchPlayers from "@/utils/fPlayers";
 
 type levelType = {
   Level_Id: number;
@@ -11,10 +11,11 @@ type levelType = {
 };
 type levelsType = levelType[];
 
-function QuizList({ allLevels, cutEnding = true }: { allLevels: levelsType; cutEnding: boolean }) {
-  const { playerLevel } = useContext(playerContext) ?? {}; 
+async function QuizList({ allLevels, cutEnding = true, playerLevel }: { allLevels: levelsType; cutEnding: boolean , playerLevel : number}) {
+ 
+ 
 
-  const displayLevel = playerLevel ?? 1; 
+  const displayLevel = playerLevel 
 
   const filteredLevels = allLevels
     .filter((level: levelType) => level.Level_Id <= displayLevel) 
@@ -30,7 +31,9 @@ function QuizList({ allLevels, cutEnding = true }: { allLevels: levelsType; cutE
   }
 
   return (
+    
     <div className="">
+
       {filteredLevels.map(
         (level: levelType) =>
           level.Level_Id > endingPoint && (

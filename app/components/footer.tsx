@@ -1,5 +1,4 @@
-"use client"; // Mark this as a Client Component in Next.js
-
+"use client"; 
 import Link from "next/link";
 import Image from "next/image";
 

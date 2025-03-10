@@ -13,8 +13,8 @@ import PlayerContextProvider from "./context/playerContext";
 const inter = Inter({ subsets: ["latin"] });
 const spacegrotesk = Space_Grotesk({ subsets: ["latin"] });
 export const metadata: Metadata = {
-  title: "Guhuza Quiz Application",
-  description: "Level Up Your Job Search with Guhuza Quiz Game",
+  title: "Guhuza’s Brain Boost",
+  description: "Level Up Your Job Search with Guhuza’s Brain Boost",
 };
 
 export default async function RootLayout({

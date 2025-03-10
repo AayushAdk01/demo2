@@ -24,11 +24,10 @@ type milestoneType = {
   type Players = playerType[]
 
   async function LeaderBoardSection() {
-    const Players: Players = await fetchPlayers();
   
     return (
       <div>
-        <LeaderBoard Players={Players} />
+        <LeaderBoard/>
       </div>
     );
   }

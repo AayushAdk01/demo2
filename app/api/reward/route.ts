@@ -26,6 +26,7 @@ export async function POST(req: Request) {
 
         }
        })
+       
 
         return NextResponse.json({ message: "User Created Sucessfullt", player : updatePlayer, nextMilestone : nextMilestone }, { status: 201 })
     } catch (e) {
