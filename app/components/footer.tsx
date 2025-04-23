@@ -99,7 +99,8 @@ export default function Footer() {
           {/* Company Info */}
           <div className="space-y-4">
             <h6 className="font-semibold">Company Info</h6>
-            <Link href="/about-us" className="block text-sm hover:underline">
+            <Link href="https://guhuza.com/about-us" className="block text-sm hover:underline"                 target="_blank"
+            >
               About Us
             </Link>
             <Link
@@ -114,26 +115,34 @@ export default function Footer() {
           <div className="space-y-4">
             <h6 className="font-semibold">Legal</h6>
             <Link
-              href="/privacy-policy"
+              href="https://guhuza.com/privacy-policy"
               className="block text-sm hover:underline"
+              target="_blank"
+
             >
               Privacy Policy
             </Link>
             <Link
-              href="/terms-of-use"
+              href="https://guhuza.com//terms-of-use"
               className="block text-sm hover:underline"
+              target="_blank"
+
             >
               Terms & Conditions
             </Link>
             <Link
-              href="/cookie-policy"
+              href="https://guhuza.com/cookie-policy"
               className="block text-sm hover:underline"
+              target="_blank"
+
             >
               Cookie Policy
             </Link>
             <Link
-              href="/subscription-agreement"
+              href="https://guhuza.com/subscription-agreement"
               className="block text-sm hover:underline"
+              target="_blank"
+
             >
               Subscription Agreement
             </Link>
@@ -142,10 +151,12 @@ export default function Footer() {
           {/* Support */}
           <div className="space-y-4">
             <h6 className="font-semibold">Support</h6>
-            <Link href="/contact" className="block text-sm hover:underline">
+            <Link href="https://guhuza.com/contact"                 target="_blank"
+ className="block text-sm hover:underline">
               Contact Us
             </Link>
-            <Link href="/help" className="block text-sm hover:underline">
+            <Link href="https://guhuza.com/help"                  target="_blank"
+ className="block text-sm hover:underline">
               Help
             </Link>
           </div>
@@ -159,7 +170,7 @@ export default function Footer() {
             {/* Powered By */}
             <div className="space-y-4">
               <h6 className="font-semibold">Powered by:</h6>
-              <Link href="http://www.TorontoJobs.ca" target="_blank">
+              <Link href="http://www.TorontoJobs.ca"  target="_blank">
                 <Image
                   src="/toronto-jobs/logo3.png"
                   alt="Toronto Jobs"

@@ -41,7 +41,7 @@ function RewardCopy({player}:typeRewardCopy) {
   
   const handleSumit = async (e: React.FormEvent) => { 
     e.preventDefault()
-   const  nextMilestone = currentMilestone +1
+   const  nextMilestone = currentMilestone + 1
     const response = await fetch("/api/reward", {
       method: "POST",
       headers: {
@@ -57,7 +57,8 @@ function RewardCopy({player}:typeRewardCopy) {
       if (reward?.Milestone_Link) {
         window.open(String(reward.Milestone_Link), "_blank");
       }
-      router.push("/profile")
+      console.log(data.nextMilestone)
+      router.push("/quiz")
       
 
     } else {

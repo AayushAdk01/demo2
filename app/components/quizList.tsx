@@ -49,7 +49,7 @@ async function QuizList({ allLevels, cutEnding = true, playerLevel }: { allLevel
 
       {!cutEnding && (
         <div className="py-20 w-full flex">
-          <button className="underline text-center font-semibold mx-auto px-auto" onClick={scrollToTop}>
+          <button className="underline text-center font-semibold mx-auto px-auto" >
             Scroll To Top
           </button>
         </div>
