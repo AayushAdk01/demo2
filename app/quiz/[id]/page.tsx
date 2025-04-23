@@ -7,7 +7,7 @@ import fetchLevels from "@/utils/fLevels";
 import fetchPlayers from "@/utils/fPlayers";
 import { auth } from "@/auth";
 import fetchUser from "@/utils/fUser";
-
+import { getCookie, setCookie } from "cookies-next";
 
 type quizeType = {
   question: string;
@@ -34,7 +34,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     const user = session && session?.user;
     const name =session ? user?.firstName == null ? "Anonymous" :user?.firstName : ""
-
+    
     const player = session ? await fetchUser(
       Number(user?.memberId),
       name,
@@ -43,6 +43,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     return (
       <div>
+     
         <QuizPageSection Quizes={Quizes} levelNumber = {levelNumber}  levelTitle = {levelTitle}  player={player} />
       </div>
     );

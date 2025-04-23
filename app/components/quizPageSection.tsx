@@ -7,18 +7,17 @@ import { redirect, useRouter } from "next/navigation";
 import LeaderBoard from "./leaderBoard";
 import { useContext } from "react";
 import { playerContext } from "../context/playerContext";
+import { setCookie } from "cookies-next";
 type quizeType = {
   question: string;
   comment: string;
   test_answer: number;
   answers: string[];
 };
-import fetchPlayers from "@/utils/fPlayers";
 
 export default function QuizPageSection({ Quizes, levelNumber, levelTitle, player }: any) {
 
 
-  const { AssignPlayerData, setPlayerLevel, setTempScore } = useContext(playerContext)
   const len = Quizes.length;
   const router = useRouter()
   const [score, setScore] = useState<number>(0);
@@ -39,9 +38,9 @@ export default function QuizPageSection({ Quizes, levelNumber, levelTitle, playe
   };
 
   const handleNextLevel = async () => {
-    if( !player) { 
-      setTempScore(score)
-      router.push("/signup")
+    if( !player.Playerpoint ) { 
+      setCookie("tempScore", score)
+      router.push("/")
     } else { 
       const nextLevel = Number(levelNumber) + 1
       const finalScore = score + player?.Playerpoint
@@ -60,8 +59,8 @@ export default function QuizPageSection({ Quizes, levelNumber, levelTitle, playe
         if (response.ok) {
           const data = await response.json();
           console.log("User updated in successfully!", data);
-          AssignPlayerData(data.player);
-          setPlayerLevel(data.player.Level_Id)
+        
+         
           router.push(`/quiz/${newlevel}`)
           console.log(data.newlevel)
           console.log(player)
@@ -257,7 +256,7 @@ export default function QuizPageSection({ Quizes, levelNumber, levelTitle, playe
 
 
          
-          <button className="quizPbtn mt-20" onClick={handleNextLevel}>Continue to Next Level</button>
+          <button className="quizPbtn mt-20" onClick={handleNextLevel}>Save Score</button>
 
           <div className="flex  flex-wrap justify-center gap-6 mt-8">
             <button className="flex  gap-4" onClick={handleRetry}>

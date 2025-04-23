@@ -1,5 +1,7 @@
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
+import { getCookie, setCookie } from "cookies-next";
+import { cookies } from "next/headers";
 type typeUser = {
   userid: number;
   username: string | null;
@@ -30,6 +32,10 @@ const fetchUser = async (userid: number, username: string, email: string) => {
       updatedStreak = 1; // Reset streak if more than 1 day has passed
     }
 
+
+    const cookieStore = await cookies()
+    const tempScore = cookieStore.get('tempScore')?.value || 0
+    const totalScore =Number(playerexist.Playerpoint) + Number(tempScore)
     const player = await prisma.player.update({
       where: {
         Player_ID: userid,
@@ -38,12 +44,14 @@ const fetchUser = async (userid: number, username: string, email: string) => {
         Player_name: username,
         streak: updatedStreak,
         lastLogin: currentDate,
+        Playerpoint : totalScore, 
+        
       },
       include: {
         milestone: true,
       },
     });
-
+setCookie("tempScore", "0")
     return player;
   } else {
     const player = await prisma.player.create({

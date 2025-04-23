@@ -13,10 +13,14 @@ import { auth } from "@/auth";
 import LogoutButton from "../components/buttons/logoutBtn";
 import LoginButton from "../components/buttons/loginBtn";
 import fetchUser from "@/utils/fUser";
-
+import { cookies } from "next/headers";
 async function QuizHomePage() {
   const players = (await fetchPlayers()) || [];
   const session = await auth();
+
+
+
+  
   if (session) {
     const user = session.user;
     const name = user?.firstName == null ? "Anonymous" :user?.firstName 
@@ -26,6 +30,7 @@ async function QuizHomePage() {
       name,
       user?.email || ''
     );
+
     const playerLevel = player?.Level_Id ?? 1;
     return (
       <div className="mt-10">
