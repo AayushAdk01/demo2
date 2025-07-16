@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://root:Kalika.123@localhost:3306/guhuza_quiz"
+  url      = "mysql://root:Aayush@123@localhost:3306/guhuza_quiz"
 }
 
 model level {
@@ -13,6 +13,21 @@ model level {
   Level_Title  String
   Level_number Int
   player       player[]
+  playerLevels PlayerLevel[]  // Add this relation field
+ 
+}
+model PlayerLevel {
+  id        Int      @id @default(autoincrement())
+  playerId  Int
+  levelId   Int
+  stars     Int
+  createdAt DateTime @default(now())
+  correctAnswers Int     // Add this line
+  // Define relations to player and level
+  player    player   @relation(fields: [playerId], references: [Player_ID])
+  level     level    @relation(fields: [levelId], references: [Level_Id])
+
+  @@unique([playerId, levelId])
 }
 
 model milestone {
@@ -23,20 +38,22 @@ model milestone {
   Milestone_reward_message String
   Milestone_Link String
   Milestone_Button_CTA String
-  player                player[]
+  player                player[] @relation("MilestonePlayers")
 }
 
 model player {
   Player_ID    Int        @id @default(autoincrement())
   Player_name  String
   Playerpoint  Int
+  
   streak       Int
   lastLogin    DateTime
   Level_Id     Int?
   Milestone_Id Int?
   level        level?     @relation(fields: [Level_Id], references: [Level_Id], map: "Player_Level_Id_fkey")
-  milestone    milestone? @relation(fields: [Milestone_Id], references: [Milestone_Id], map: "Player_Milestone_Id_fkey")
-  
+  milestone    milestone? @relation(fields: [Milestone_Id], references: [Milestone_Id], name: "MilestonePlayers", map: "Player_Milestone_Id_fkey")
+  playerLevels PlayerLevel[]  
+
   @@index([Level_Id], map: "Player_Level_Id_fkey")
   @@index([Milestone_Id], map: "Player_Milestone_Id_fkey")
 }

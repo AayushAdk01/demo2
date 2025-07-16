@@ -1,36 +1,32 @@
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma"
+import prisma from "@/lib/prisma";
 
 export async function POST(req: Request) {
 
+  
+  try {
+    const { playerId, milestoneId } = await req.json();
 
-    try {
-        const { playerId,nextMilestone } = await req.json()
-        if (!playerId || !nextMilestone ) {
-            return NextResponse.json(
-                { message: "All field are required" +nextMilestone +playerId },
-                { status: 400 }
-                
-            )
-        }
+    // Update player with milestone (simplified)
+    const updatedPlayer = await prisma.player.update({
+      where: { Player_ID: Number(playerId) },
+      data: {
+        Milestone_Id: Number(milestoneId),
+        Playerpoint: { increment: 100 }
+      },
+      include: { milestone: true }
+    });
 
-       const updatePlayer = await prisma.player.update({
-        where: { 
-            Player_ID: playerId
-        }, 
-        data : { 
-            Milestone_Id: nextMilestone
+    return NextResponse.json({
+      message: "Reward claimed successfully!",
+      player: updatedPlayer
+    }, { status: 200 });
 
-        }, include: {
-            milestone: true
-
-        }
-       })
-       
-
-        return NextResponse.json({ message: "User Created Sucessfullt", player : updatePlayer, nextMilestone : nextMilestone }, { status: 201 })
-    } catch (e) {
-        console.error(e)
-        return NextResponse.json({ message: "Failed to create user" + e, error: e }, { status: 500 })
-    }
+  } catch (error) {
+    console.error("Reward claim error:", error);
+    return NextResponse.json(
+      { message: "Failed to claim reward", error: error instanceof Error ? error.message : "Unknown error" },
+      { status: 500 }
+    );
+  }
 }

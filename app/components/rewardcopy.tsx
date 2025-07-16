@@ -1,87 +1,54 @@
 "use client";
-import React, { useState, useRef, useContext} from "react";
-import Image from "next/image";
-import { playerContext } from "../context/playerContext";
-import { Resend } from 'resend';
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+export default function RewardCopy({ player }: { player: any }) {
+  const router = useRouter();
+  const [isClaiming, setIsClaiming] = useState(false);
+  const [error, setError] = useState("");
 
-type milestoneType = {
-  Milestone_Id: number;
-  Milestone_Title: string;
-  Milestone_description: string;
-  UnlockingLevel: number;
-  Milestone_reward_message: string;
-  Milestone_Link:string; 
-  Milestone_Button_CTA : string 
-};
+  const handleClaimReward = async () => {
+    setIsClaiming(true);
+    try {
+      const response = await fetch("/api/reward", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          playerId: player.Player_ID,
+          milestoneId: player.milestone.Milestone_Id
+        })
+      });
 
-type playerType = {
-  Player_ID: number;
-  Player_name: string;
-  Playerpoint: number;
-  streak: number;
-  lastLogin: Date;
-  Level_Id: number;
-  Milestone_Id?: number;
-  milestone: milestoneType;
-};
-
-
-  type typeRewardCopy =  { 
-    player : playerType | null
-  }
-
-
-function RewardCopy({player}:typeRewardCopy) {
-  const router = useRouter()
-  const reward = player?.milestone
-  const playerId = player?.Player_ID
-  const currentMilestone = player?.milestone?.Milestone_Id ?? 1
-  
-  const handleSumit = async (e: React.FormEvent) => { 
-    e.preventDefault()
-   const  nextMilestone = currentMilestone + 1
-    const response = await fetch("/api/reward", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ playerId,  nextMilestone }),
-    });
-  
-    if (response.ok) { 
-      
-    
-      const data = await response.json()
-      if (reward?.Milestone_Link) {
-        window.open(String(reward.Milestone_Link), "_blank");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to claim reward");
       }
-      console.log(data.nextMilestone)
-      router.push("/quiz")
-      
 
-    } else {
-      console.error("Failed to send email");
+      // Refresh the page to show updated status
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unknown error");
+      console.error("Claim error:", err);
+    } finally {
+      setIsClaiming(false);
     }
   };
 
-
-
   return (
-    <div className="container">
-      <h1 className="title mt-20">{reward?.Milestone_Title}</h1>
-      <p className="mt-6">
-      {reward?.Milestone_description}      </p>
-      <p className="mt-4">{reward?.Milestone_reward_message}</p>
-      <div className="my-11">        <button className="quizPbtn" onClick={handleSumit}>{reward?.Milestone_Button_CTA}</button>
-
-
-      </div>
-     
-   
+    <div className="reward-container">
+      <h2 className="text-3xl font-bold mb-4">{player.milestone.Milestone_Title}</h2>
+      <p className="text-lg mb-2">{player.milestone.Milestone_description}</p>
+      <p className="mb-6">{player.milestone.Milestone_reward_message}</p>
+      
+      <button
+        className="quizPbtn"
+        onClick={handleClaimReward}
+        disabled={isClaiming}
+      >
+        {isClaiming ? "Claiming..." : player.milestone.Milestone_Button_CTA}
+      </button>
+      
+      {error && <p className="text-red-500 mt-4">Error: {error}</p>}
     </div>
   );
 }
-
-export default RewardCopy;

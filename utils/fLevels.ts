@@ -2,16 +2,13 @@ import prisma from "@/lib/prisma"
 
 async function fetchLevels() {
     try {
-        const levels = await prisma.level.findMany({ 
-            orderBy : { 
-                Level_Id : 'desc'
-            }
-        });
-        return levels
-
+      return await prisma.level.findMany({ 
+        orderBy: { Level_number: 'asc' } // Use Level_number instead of ID
+      });
     } catch (e) {
-        console.error(e)
+      console.error("Failed to fetch levels:", e);
+      return [];
     }
-}
+  }
 
 export default fetchLevels

@@ -1,59 +1,56 @@
-import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
-import { cookies } from "next/headers";
-import { useContext } from "react";
-import PlayerContextProvider from "@/app/context/playerContext";
+// app/api/leaderboard/route.ts
+import { NextRequest, NextResponse } from 'next/server'
+import prisma from '@/lib/prisma'
 
-export async function POST(req: Request) {
-    try {
-        
-        const { username, password } = await req.json();
+export async function GET(request: NextRequest) {
+  const userId = request.nextUrl.searchParams.get('userId');
+  
+  try {
+    const allPlayers = await prisma.player.findMany({
+      orderBy: { Playerpoint: 'desc' },
+      select: {
+        Player_ID: true,
+        Player_name: true,
+        Playerpoint: true,
+        Level_Id: true
+      }
+    });
 
-        if (!username || !password) {
-            return NextResponse.json({ message: "Username and password are required" }, { status: 400 });
-        }
-
-        const user = await prisma.user.findFirst({
-            where: {
-                Username: username,
-            },
-        });
-
-        if (!user) {
-            return NextResponse.json({ message: "Invalid credentials" }, { status: 401 });
-        }
-
-        const passwordMatch = await bcrypt.compare(password, user.Password);
-
-        if (!passwordMatch) {
-            return NextResponse.json({ message: "Invalid credentials" }, { status: 401 });
-        }
-
-
-        const player = await prisma.player.findFirst({
-            where: {
-                user_Id: user.User_Id,
-            },
-            include: {
-                milestone: true
-
-            }
-        });
-
-        if (!player) {
-            return NextResponse.json({ message: "Player data not found for this user" }, { status: 404 });
-        }
-        if (player) { 
-            const cookieStore =  cookies()
-            cookieStore.set('LoggedIn', 'true', { secure: true , httpOnly:true,sameSite:"strict", path:"/", })
-            cookieStore.set('PlayerLevel', String(player.Level_Id), { secure: true , httpOnly:true,sameSite:"strict", path:"/", })
-
-        }
-        return NextResponse.json({ message: "Login successful", player: player }, { status: 200 });
-
-    } catch (error) {
-        console.error("Login error:", error);
-        return NextResponse.json({ message: "An error occurred during login" + error }, { status: 500 });
+    const topPlayers = allPlayers.slice(0, 3);
+    const currentPlayer = allPlayers.find(p => p.Player_ID === Number(userId));
+    
+    if (!currentPlayer) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
+
+    const currentRank = allPlayers.findIndex(p => p.Player_ID === currentPlayer.Player_ID) + 1;
+    const currentPlayerIndex = allPlayers.findIndex(p => p.Player_ID === currentPlayer.Player_ID);
+    
+    // Get surrounding players
+    const surroundingPlayers = {
+      above: allPlayers[currentPlayerIndex - 1] || null,
+      below: allPlayers[currentPlayerIndex + 1] || null
+    };
+
+    // Get player just above (for next rank threshold)
+    const nextRankThreshold = surroundingPlayers.above?.Playerpoint || currentPlayer.Playerpoint + 100;
+    
+    // Get player just below (for current rank floor)
+    const currentRankFloor = surroundingPlayers.below?.Playerpoint || 0;
+
+    return NextResponse.json({
+      topPlayers,
+      currentUser: {
+        ...currentPlayer,
+        rank: currentRank,
+        nextRankThreshold,
+        currentRankFloor,
+        nextRank: currentRank > 1 ? currentRank - 1 : null
+      },
+      surroundingPlayers
+    });
+  } catch (error) {
+    console.error('Error fetching leaderboard:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
 }

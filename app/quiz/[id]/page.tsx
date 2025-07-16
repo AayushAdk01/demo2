@@ -25,9 +25,13 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     const data = await fetchQuiz(params.id);
     const Quizes = data.test.question;
-
+    console.log(typeof(params))
+    
+   
     const levels = (await fetchLevels()|| [])
+    console.log(typeof(levels))
     const levelNumber = params.id
+    console.log(typeof(levelNumber))
     const levelTitle = levels?.[Number(levelNumber)-1].Level_Title
 
     const session = await auth()
